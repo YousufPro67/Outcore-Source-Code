@@ -1,0 +1,4 @@
+return {
+	["LICENSED"] = "LICENSED",
+	["ROYALTY_FREE"] = "ROYALTY_FREE",
+}

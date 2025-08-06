@@ -1,0 +1,101 @@
+----local knit = require(game:GetService('ReplicatedStorage').Packages.Knit)
+----local module = knit.CreateController({
+----	Name = "Camera1",
+----	tweennew = nil,
+----})
+--local de = false
+--local uis = game:GetService("UserInputService")
+--local cameraservice = require(script.Parent.Parent.StarterPlayerScripts.CameraService)
+--cameraservice:CreateNewCameraView("InGame",{
+--	FieldOfView = 70,
+--	CharacterVisibility = "Body",
+--	Zoom = 0,
+--	Offset = CFrame.new(0, 0, 0),
+--	LockMouse = true,
+--	MinZoom = 0,
+--	MaxZoom = 0.5,
+--	BodyFollow = true,
+--	Smoothness = 0.5,
+--	RotSmoothness = 1
+--})
+--cameraservice:CreateNewCameraView("MainMenu",{
+--	FieldOfView = 70,
+--	CharacterVisibility = "None",
+--	Offset = CFrame.new(0, 0, 0),
+--	LockMouse = false,
+--	MinZoom = 0,
+--	MaxZoom = 0.5,
+--	BodyFollow = false,
+--	Smoothness = 0.75
+--})
+--cameraservice:CreateNewCameraView("UnFollow",{
+--	CharacterVisibility = "Body",
+--	Zoom = 0,
+--	Offset = CFrame.new(0, 0, 0),
+--	LockMouse = false,
+--	MinZoom = 0,
+--	MaxZoom = 0.5,
+--	BodyFollow = false,
+--	Smoothness = 0.75
+--})
+
+--function module.ControlCamera(FOLLOW,CAM:Camera,PLR:Player,FOV,IN_GAME,MOUSE,CAM_PART:Part,CAM_SPEED,speedline)
+--	local cursorgui = game.Players.LocalPlayer.PlayerGui.Cursor
+--	if FOLLOW then
+--		de = false
+--		if not IN_GAME then
+--			cameraservice:SetCameraView("Default")
+--			uis.MouseIconEnabled = true
+--			cursorgui.Enabled = false
+--			PLR.CameraMode = Enum.CameraMode.Classic
+--			CAM.Focus = CAM_PART.CFrame
+--			CAM.CameraSubject = CAM_PART
+		    
+--			local newcframe = CAM_PART.CFrame  * CFrame.Angles(
+--				math.rad((((MOUSE.Y - MOUSE.ViewSizeY / 2) / MOUSE.ViewSizeY)) * -CAM_SPEED ),
+--				math.rad((((MOUSE.X - MOUSE.ViewSizeX / 2) / MOUSE.ViewSizeX)) * -CAM_SPEED ),
+--				0
+--			)
+			
+--			local ts = game:GetService("TweenService")
+--			local tweenspeed = 1
+--			if (CAM.CFrame.Position - CAM_PART.CFrame.Position).magnitude == 0 then
+--				tweenspeed = 1
+--			else
+--				tweenspeed = (CAM.CFrame.Position - CAM_PART.CFrame.Position).magnitude * 0.025
+--			end
+--			module.tweennew = ts:Create(CAM,TweenInfo.new(tweenspeed),{CFrame = newcframe})
+--			module.tweennew:Play()
+--		elseif IN_GAME then
+--			uis.MouseIconEnabled = false
+--			cursorgui.Enabled = true
+--			CAM.CameraType = Enum.CameraType.Scriptable
+--			local octave = math.clamp(PLR.Character:WaitForChild("HumanoidRootPart").AssemblyLinearVelocity.magnitude/100,0.5,1)
+--			game.ReplicatedStorage.Sounds.OutcoreGame.PitchShiftSoundEffect2.Octave = octave
+--			game.ReplicatedStorage.Sounds.OutcoreGame.PitchShiftSoundEffect1.Octave = octave
+--			--CAM.CameraSubject = PLR.Character:FindFirstChildOfClass("Humanoid")
+--			cameraservice:SetCameraView("InGame")
+--			cameraservice:SetCameraHost()
+--			cameraservice:ChangeFOV(FOV,true)
+			
+--		end
+
+--	elseif not FOLLOW then
+--		local ts = game:GetService("TweenService")
+--		local speed = 20
+--		cameraservice:SetCameraView("Default")
+--		if not de then
+--			module.tweennew = ts:Create(CAM,TweenInfo.new(speed,Enum.EasingStyle.Cubic),{FieldOfView = math.clamp(CAM.FieldOfView-20,0,120)})
+--			module.tweennew:Play()
+--			de = true
+--		end
+--		uis.MouseIconEnabled = true
+--		cursorgui.Enabled = false
+--		PLR.CameraMode = Enum.CameraMode.Classic
+--		CAM.CameraType = Enum.CameraType.Fixed
+--		game:GetService('UserInputService').MouseBehavior = Enum.MouseBehavior.Default
+		
+--	end
+
+--end
+--return module

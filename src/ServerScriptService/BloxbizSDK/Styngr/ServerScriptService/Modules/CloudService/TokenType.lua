@@ -1,0 +1,5 @@
+return {
+	NO_TOKEN = "NO_TOKEN",
+	TOKEN = "TOKEN",
+	STORE_TOKEN = "STORE_TOKEN",
+}

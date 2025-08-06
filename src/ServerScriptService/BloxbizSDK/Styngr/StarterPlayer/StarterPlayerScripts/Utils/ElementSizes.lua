@@ -1,0 +1,11 @@
+return {
+	WIDTH = {
+		BUTTON = 150,
+		MINIPLAYER = 210,
+		NOTIFICATION = 210,
+		PLAYLIST_MENU = 105,
+	},
+	HEIGHT = {
+		PLAYLIST_MENU = 80,
+	},
+}
