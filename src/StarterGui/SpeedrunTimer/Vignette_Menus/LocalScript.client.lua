@@ -9,6 +9,6 @@ local function SetValue(plr,value,settingname)
 		script.Parent.Visible = not value
 	end
 end
-SettingService.callbackRE:Connect(function(settingname,value)
+SettingService.OnValueChanged:Connect(function(settingname,value)
 	SetValue(game.Players.LocalPlayer,value,settingname)
 end)

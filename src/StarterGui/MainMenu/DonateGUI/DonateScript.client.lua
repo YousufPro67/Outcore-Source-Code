@@ -18,6 +18,8 @@ button:Destroy()
 
 x.MouseButton1Click:Connect(function()
 	script.Parent.Enabled = false
+	local uiblur = game.Lighting.SecondaryGUIBlur :: BlurEffect
+	uiblur.Enabled = false
 	x.TextColor3 = Color3.new(1, 1, 1)
 end)
 

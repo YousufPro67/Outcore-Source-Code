@@ -1,6 +1,6 @@
 local UIS = game:GetService("UserInputService")
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local plrdata = knit.GetService("PlayerDataManager")
 local clientdata = knit.GetService("ClientData")
 local ON = false
@@ -8,6 +8,18 @@ local setting = script.Parent:GetAttribute("Setting")
 local button = script.Parent.TextButton
 local ts = game:GetService("TweenService")
 local plrdatatable = plrdata:Get()
+local dataloaded = false
+
+plrdata.OnDataChanged:Connect(function(data)
+	if not dataloaded then 
+		plrdatatable = data
+		dataloaded = true
+	end
+end)
+
+while not dataloaded do
+	wait(0.1)
+end
 
 local function MakeTweens(obj:GuiBase)
 	if obj:IsA("TextLabel") then

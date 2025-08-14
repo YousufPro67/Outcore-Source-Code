@@ -1,5 +1,5 @@
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local plrstates = knit.GetService("SettingService")
 local buttons:{Instance} = script.Parent:GetDescendants()
 local camera = workspace.CurrentCamera
@@ -9,6 +9,9 @@ local clientdata = knit.GetService("ClientData")
 local uiblur = game.Lighting.SecondaryGUIBlur
 
 local plrdatatable = plrdata:Get()
+plrdata.OnDataChanged:Connect(function(data)
+	plrdatatable = data
+end)
 if plrdatatable.ABOUT_VERSION_CHECKED < script.Parent.Parent.Parent.AboutGUI:GetAttribute("Version") then
 	script.Parent.Frame.ABOUT.New.Visible = true
 else

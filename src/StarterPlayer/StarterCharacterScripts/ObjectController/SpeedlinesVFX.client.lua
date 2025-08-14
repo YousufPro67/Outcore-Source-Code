@@ -3,15 +3,13 @@ knit.Start({ServicePromises = false}):await()
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local hrp:BasePart = character:WaitForChild("HumanoidRootPart",60)
-local pos
 local Speed_Lines;
-local no = 0
 local plrdataservice = knit.GetService("PlayerDataManager")
 
 local plrdata = {}
 
 plrdata = plrdataservice:Get()
-plrdataservice.callbackRE:Connect(function(name,val)
+plrdataservice.OnValueChanged:Connect(function(name,val)
 	plrdata[name] = val
 end)
 
@@ -91,7 +89,6 @@ ParticleEmitter.Size = NumberSequence.new({
 ParticleEmitter.Shape = Enum.ParticleEmitterShape.Disc
 ParticleEmitter.LightEmission = 1
 local Unit = Vector3.new(0,0,0)
-local cframelerptime
 
 local connection = game:GetService("RunService").Heartbeat:Connect(function()
 	if plrdata.SHOW_SPEEDLINES then
@@ -111,12 +108,12 @@ local connection = game:GetService("RunService").Heartbeat:Connect(function()
 		Speed_Lines.CFrame = Speed_Lines.CFrame:Lerp(target, 0.1)
 		--Speed_Lines.CFrame = target
 		local keypoints = {
-			NumberSequenceKeypoint.new(0, hrp.AssemblyLinearVelocity.magnitude/100),
-			NumberSequenceKeypoint.new(0.8, hrp.AssemblyLinearVelocity.magnitude/100),
+			NumberSequenceKeypoint.new(0, hrp.AssemblyLinearVelocity.Magnitude/100),
+			NumberSequenceKeypoint.new(0.8, hrp.AssemblyLinearVelocity.Magnitude/100),
 			NumberSequenceKeypoint.new(1, -2)  -- Optional, to define the end value
 		}
 		Speed_Lines.ParticleEmitter.Squash = NumberSequence.new(keypoints)
-		Speed_Lines.ParticleEmitter.Rate = hrp.AssemblyLinearVelocity.magnitude/10
+		Speed_Lines.ParticleEmitter.Rate = hrp.AssemblyLinearVelocity.Magnitude/10
 		Speed_Lines.ParticleEmitter.Speed = NumberRange.new(hrp.AssemblyLinearVelocity.Magnitude/10)
 		Speed_Lines.ParticleEmitter.Enabled = math.round(hrp.AssemblyLinearVelocity.Magnitude) > 90
 		Speed_Lines.ParticleEmitter.Color = math.round(hrp.AssemblyLinearVelocity.Magnitude) > 250 and ColorSequence.new(Color3.fromRGB(255, 85, 0)) or ColorSequence.new(Color3.fromRGB(255, 255, 255))
@@ -124,7 +121,6 @@ local connection = game:GetService("RunService").Heartbeat:Connect(function()
 		for _, v in player.PlayerGui.SpeedrunTimer.FlameVFX:GetChildren() do
 			v.Emitter:SetAttribute("Enabled", math.round(hrp.AssemblyLinearVelocity.Magnitude) > 250)
 		end
-		player.PlayerGui.SpeedrunTimer.LevelProgressBar.Frame.BackgroundColor3 = math.round(hrp.AssemblyLinearVelocity.Magnitude) > 250 and Color3.fromRGB(255, 85, 0) or Color3.fromRGB(255, 255, 255)
 		Speed_Lines.ParticleEmitter.LightEmission = math.round(hrp.AssemblyLinearVelocity.Magnitude) > 250 and 1 or 0
 		Speed_Lines.ParticleEmitter.Brightness = math.round(hrp.AssemblyLinearVelocity.Magnitude) > 250 and 10 or 1
 	end

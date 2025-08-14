@@ -1,5 +1,5 @@
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local SettingService = knit.GetService("SettingService")
 local TS = game:GetService('TweenService')
 local THover : Color3 = script:GetAttribute('THover')

@@ -1,4 +1,4 @@
--- ProfileTemplate table is what empty profiles will default to.
+--[[ ProfileTemplate table is what empty profiles will default to.
 -- Updating the template will not include missing template values
 --   in existing player profiles!
 
@@ -28,6 +28,12 @@ local function PlayerAdded(player)
 	if profile ~= nil then
 		profile:AddUserId(player.UserId)
 		profile:Reconcile()
+		for k, v in pairs(ProfileTemplate) do
+					if profile.Data[k] == nil then
+						profile.Data[k] = v
+						print(k, v)
+					end
+		end
 		profile:ListenToRelease(function()
 			Profiles.Profiles[player] = nil
 			warn("Data issue, try again shortly. If issue persists, contact us!")
@@ -64,3 +70,4 @@ Players.PlayerRemoving:Connect(function(player)
 end)
 
 
+]]

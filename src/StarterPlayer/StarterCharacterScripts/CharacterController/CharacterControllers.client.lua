@@ -63,6 +63,9 @@ local slidevfx2 = character["Left Leg"].SlideVFX:GetChildren()
 
 local lastpos = hrp.Position
 local PlayerData = plrdataservice:Get()
+plrdataservice.OnDataChanged:Connect(function(data)
+	PlayerData = data
+end)
 
                     --|Setup|--
 
@@ -161,7 +164,6 @@ slidesound:Play()
 slidesound:Pause()
 
 hrp.Touched:Connect(function(hit:BasePart)
-	if not Sliding then return end
 	local Enemy = hit:FindFirstAncestorOfClass("Model")
 	if not Enemy then return end
 	local EHum = Enemy:FindFirstChildOfClass("Humanoid")

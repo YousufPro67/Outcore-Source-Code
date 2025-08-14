@@ -18,7 +18,7 @@ local Knit = require(game.ReplicatedStorage.Packages.Knit)
 
 local ProfileServiceManager = Knit.CreateService({
 	Name = "PlayerDataMafffffnager",
-	Client = {callbackRE = Knit.CreateSignal()}
+	Client = {OnDataChanged = Knit.CreateSignal()}
 })
 --local profileTemplete = {
 --	FOV = 100,

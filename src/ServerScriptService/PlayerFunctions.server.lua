@@ -86,14 +86,15 @@ local function PlrDied(player:Player)
 	plrService:IsDied(player,plrSettings[player.UserId].INGAME,plrSettings[player.UserId].FOLLOW)
 end
 local function OnPlayerAdded(player:Player)
+	for _, v in workspace.CameraParts:GetChildren() do
+		player:AddReplicationFocus(v)
+	end
+	
 	connections[player.UserId] = {}
 	setting.Players:Initialize(player)
 	setting.Players.OnValueChanged:Connect(player,SetValue)
 	setting.Players.OnDataChanged:Connect(player,SettingsChanged)
 	
-	for _, v in  workspace.Spawnpoints:GetChildren() do
-		player:AddReplicationFocus(v)
-	end
 	cs:CreateTimer(player.UserId)
 	player:LoadCharacter()
 	plrSettings[player.UserId] = setting.Players:Get(player)
@@ -247,6 +248,10 @@ for _, obj in workspace:GetDescendants() do
         end)
     end
 end
+
+--// Skip Stage Event
+-- This event allows players to skip the current stage if they have not completed it yet.
+-- It checks if the player has completed the stage and updates their level accordingly.
 
 SkipStage.OnServerEvent:Connect(function(plr: Player)
 	local Settings = plrSettings[plr.UserId]

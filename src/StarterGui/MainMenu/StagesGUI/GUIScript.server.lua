@@ -23,7 +23,7 @@ local names = {
 }
 
 local plrdata = plrdataservice:Get()
-plrdataservice.callbackRE:Connect(function(name,val)
+plrdataservice.OnValueChanged:Connect(function(name,val)
 	plrdata[name] = val
 	if name == "LEVELS" then
 		for _,button in frame.Dimensions.Sandbox:GetChildren() do

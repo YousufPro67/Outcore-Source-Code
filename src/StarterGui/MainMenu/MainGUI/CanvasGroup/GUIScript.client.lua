@@ -1,5 +1,5 @@
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local plrstates = knit.GetService("SettingService")
 local buttons:{Instance} = script.Parent:GetDescendants()
 local camera = workspace.CurrentCamera
@@ -10,6 +10,16 @@ local uiblur = game.Lighting.SecondaryGUIBlur
 
 
 local plrdatatable = plrdata:Get()
+plrdata.OnDataChanged:Connect(function(data)
+	plrdatatable = data
+	if plrdatatable.ABOUT_VERSION_CHECKED < script.Parent.Parent.Parent.AboutGUI:GetAttribute("Version") then
+		script.Parent.Frame.ABOUT.New.Visible = true
+		script.Parent.Frame.ABOUT.TextLabel.UIPadding.PaddingLeft = UDim.new(0.06,0)
+	else
+		script.Parent.Frame.ABOUT.New.Visible = false
+		script.Parent.Frame.ABOUT.TextLabel.UIPadding.PaddingLeft = UDim.new(0,0)
+	end
+end)
 if plrdatatable.ABOUT_VERSION_CHECKED < script.Parent.Parent.Parent.AboutGUI:GetAttribute("Version") then
 	script.Parent.Frame.ABOUT.New.Visible = true
 	script.Parent.Frame.ABOUT.TextLabel.UIPadding.PaddingLeft = UDim.new(0.06,0)
@@ -34,6 +44,9 @@ local function ButtonTween()
 				tweenin:Play()
 			end)
 			button.MouseLeave:Connect(function()
+				tweenout:Play()
+			end)
+			button.Activated:Connect(function()
 				tweenout:Play()
 			end)
 		end
@@ -96,7 +109,7 @@ local function OnButtonClicked(button  :  TextButton)
 		uiblur.Enabled = not uiblur.Enabled
 	elseif button.Name == "HELP" then
 		script.Parent.Parent.Parent.HelpGUI.Enabled = true
-		uiblur.Enabled = not uiblur.Enabled
+		uiblur.Enabled = true
 	end
 	
 end

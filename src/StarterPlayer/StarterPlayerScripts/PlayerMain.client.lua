@@ -1,4 +1,4 @@
-wait()
+wait(1)
 local knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 knit.Start({ServicePromises = false}):await()
 local CameraController = knit.GetController("Camera")
@@ -48,13 +48,14 @@ hotbar:SetEnabled(false)
 plrSettings = plrData:Get()
 
 game.Lighting.ColorCorrection.Enabled = false
+game.Lighting.MenuDepthOfField.Enabled = true
 plrSetting:Set("LEVEL_NAME", LEVELS_LIST[plrstates.SPS + 1])
 
 pcall(function()
 	game:GetService("StarterGui"):SetCore("ResetButtonCallback", false)
 end)
 
-local function SetValue(plr,value,settingname)
+local function SetValue(_,value,settingname)
 	if plrstates[settingname] then
 		plrstates[settingname] = value
 	elseif plrSettings[settingname] then
@@ -76,12 +77,13 @@ local function SetValue(plr,value,settingname)
 		plrSetting:Set("LEVEL_NAME", LEVELS_LIST[value])
 	end
 end
-plrSetting.callbackRE:Connect(function(settingname,value)
+plrSetting.OnValueChanged:Connect(function(settingname,value)
 	SetValue(game.Players.LocalPlayer,value,settingname)
 end)
-plrData.callbackRE:Connect(function(settingname,value)
+plrData.OnValueChanged:Connect(function(settingname,value)
 	SetValue(game.Players.LocalPlayer,value,settingname)
 end)
+
 
 cam.CFrame = plrstates.CAMPART.CFrame or game.Workspace.CameraParts.MainCam.CFrame
 cam.CameraSubject = plrstates.CAMPART or game.Workspace.CameraParts.MainCam.CFrame
@@ -93,18 +95,20 @@ hum.Jumping:Connect(function(isJumping)
 end)
 
 runService.PreRender:Connect(function(dt)
-		CameraController.ControlCamera(
-			plrstates.FOLLOW,
-			cam,
-			player,
-			plrSettings.FOV,
-			plrstates.INGAME,
-			player:GetMouse(),
-			plrstates.CAMPART or game.Workspace.CameraParts.MainCam,
-			cam_speed,
-			plrSettings.CAMERA_SHAKE,
-			nil
-		)
+		pcall(function()
+			CameraController.ControlCamera(
+						plrstates.FOLLOW,
+						cam,
+						player,
+						plrSettings.FOV,
+						plrstates.INGAME,
+						player:GetMouse(),
+						plrstates.CAMPART or game.Workspace.CameraParts.MainCam,
+						cam_speed,
+						plrSettings.CAMERA_SHAKE,
+						nil
+					)
+		end)
 		for _,obj:Sound in game.ReplicatedStorage.MUSIC:GetChildren() do
 			if plrSettings.MUSIC then
 			obj.Volume = plrSettings.MUSIC / 200

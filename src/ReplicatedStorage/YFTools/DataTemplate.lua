@@ -21,8 +21,10 @@ local module = {
 	FINISHES = 0,
 	KILLS = 0,
 	DIMENSIONS = {
-		SKYHOP = {}
-	};
+		SKYHOP = {
+			QUESTS = {}
+		}
+	},
 	BEST_TIMES = {};
 	
 }

@@ -23,7 +23,7 @@ local names = {
 }
 
 local plrdata = plrdataservice:Get()
-plrdataservice.callbackRE:Connect(function(name,val)
+plrdataservice.OnValueChanged:Connect(function(name,val)
 	plrdata[name] = val
 	if name == "LEVELS" then
 		for _,button in frame.Dimensions.Sandbox:GetChildren() do
@@ -131,26 +131,40 @@ local function CheckQuest(tquest:Frame, quest)
 	return quest.COMPLETED
 end
 
+local questframes = {}
 local function MakeQuests(Dimension)
 	local qs = plrdata.DIMENSIONS[Dimension].QUESTS
-	local questframes = {}
 	for n, q in pairs(qs) do
-		local newq = template:Clone()
-		newq.Goal.Value = q.GOAL
-		newq.TextLabel.Text = string.format(q.CONTEXT, q.CURRENT_VALUE, q.GOAL)
-		newq.Name = n
-		newq.Icon.Image = q.ICON
-		newq.Parent = template.Parent
-		table.insert(questframes, newq)
-		CheckQuest(newq, q)
+		local exists = false
+		for _, questobj in pairs(questframes) do
+			if questobj.Name == n then
+				exists = true
+				break
+			end
+		end
+
+		if not exists then
+			local newq = template:Clone()
+			newq.Visible = true
+			newq.Goal.Value = q.GOAL
+			newq.TextLabel.Text = string.format(q.CONTEXT, q.CURRENT_VALUE, q.GOAL)
+			newq.Name = n
+			newq.Icon.Image = q.ICON
+			newq.Parent = template.Parent
+			table.insert(questframes, newq)
+			CheckQuest(newq, q)
+		end
 	end
 	return questframes
 end
 
 --1 = speed, 2 = jumps, 3 = finishes, 4 = kills
-
 Quests["SKYHOP"] = MakeQuests("SKYHOP")
-template:Destroy()
+
+plrdataservice.OnDataChanged:Connect(function()
+	Quests["SKYHOP"] = MakeQuests("SKYHOP")
+end)
+template.Visible = false
 
 game.ReplicatedStorage.RemoteEvents.UpdateQuests.OnClientEvent:Connect(function()
 	for _,v in Quests["SKYHOP"] do

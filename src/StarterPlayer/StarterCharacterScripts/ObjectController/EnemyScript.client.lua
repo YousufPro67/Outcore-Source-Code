@@ -1,5 +1,5 @@
 local KNIT = require(game:GetService("ReplicatedStorage").Packages.Knit)
-KNIT.Start():await()
+KNIT.Start({ServicePromises = false}):await()
 local PLAYER_SETTINGS_MANAGER = KNIT.GetService("SettingService")
 
 local PLAYER_SETTINGS = PLAYER_SETTINGS_MANAGER:Get()
@@ -22,7 +22,7 @@ local function SetValue(plr,value,settingname)
 		PLAYER_SETTINGS[settingname] = value
 	end
 end
-PLAYER_SETTINGS_MANAGER.callbackRE:Connect(function(settingname,value)
+PLAYER_SETTINGS_MANAGER.OnValueChanged:Connect(function(settingname,value)
 	SetValue(game.Players.LocalPlayer, value, settingname)
 end)
 
@@ -84,6 +84,7 @@ RUN_SERVICE.PreRender:Connect(function()
 			
 			if CD[ENEMY] then continue end
 			--raycast to the player
+						
 			if not workspace.SkyHop:FindFirstChild(PLAYER_SETTINGS.LEVEL_NAME) then continue end
 			if not workspace.SkyHop[PLAYER_SETTINGS.LEVEL_NAME]:GetAttribute("EnemyCanShoot") then continue end
 			local ray = workspace:Raycast(h.Position, -dir * MAX_DIST)

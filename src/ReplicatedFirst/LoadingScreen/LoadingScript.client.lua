@@ -8,6 +8,7 @@ local debounce = false
 local gui = script.Parent.LoadingScreen:Clone()
 local PText = gui.Frame.Loadinfo
 local PBar = gui.Frame.Frame.CanvasGroup.LoadingBar
+gui.Frame.CanvasGroup.Visible = false
 
 StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
 
@@ -34,7 +35,7 @@ gui.Frame.CanvasGroup.Skip.Activated:Once(function()
 	local uit = TS:Create(gui.Frame, TweenInfo.new(2, Enum.EasingStyle.Sine), {GroupTransparency = 1})
 	uit:Play()
 	gui.Frame.TextButton:Destroy()
-	wait(1)
+	task.wait(1)
 	local blurt = TS:Create(blur,TweenInfo.new(2, Enum.EasingStyle.Sine),{Size = 0})
 	blurt:Play()
 	blurt.Completed:Wait()
@@ -43,7 +44,14 @@ gui.Frame.CanvasGroup.Skip.Activated:Once(function()
 	script:Destroy()
 end)
 
-
+-- Show skip button after 15 seconds using task.delay
+task.delay(10, function()
+	if not debounce then
+		debounce = true
+		gui.Frame.CanvasGroup.Visible = true
+		TS:Create(gui.Frame.CanvasGroup,TweenInfo.new(0.5,Enum.EasingStyle.Sine),{GroupTransparency = 0}):Play()
+	end
+end)
 
 for i, asset in ipairs(assets) do
 	if asset.Name == "exe_storage" or asset:IsDescendantOf(game.ReplicatedStorage.exe_storage) then continue end
@@ -52,32 +60,23 @@ for i, asset in ipairs(assets) do
 
 	PText.Text = math.floor(percent * 100) .. "%"
 	TS:Create(PBar, TweenInfo.new(1), {Size = UDim2.new(percent, 0, 1, 0)}):Play()
-	if tick() - sstartime > 15 and not debounce then
-		debounce = true
-		gui.Frame.CanvasGroup.Visible = true
-		TS:Create(gui.Frame.CanvasGroup,TweenInfo.new(0.5,Enum.EasingStyle.Sine),{GroupTransparency = 0}):Play()
-	end
 
 	local success, err = pcall(function()
 		local loaded = false
 
-		-- Start a separate thread to handle the timeout
-		local timeoutThread = coroutine.create(function()
-			while not loaded do
-				if tick() - starttime >= 5 then
-					warn("Asset loading timeout: ", asset)
-					break
-				end
-				wait(0.1)
+		-- Use task.delay for timeout warning
+		local timeoutWarned = false
+		local timeoutConn = task.delay(5, function()
+			if not loaded then
+				timeoutWarned = true
+				warn("Asset loading timeout: ", asset)
 			end
 		end)
 
-		-- Start preloading
 		CP:PreloadAsync({asset})
 		loaded = true
 
-		-- Resume the timeout thread to exit if done within time
-		coroutine.resume(timeoutThread)
+		-- No need to cancel task.delay, just set loaded = true before timeout triggers
 	end)
 
 	if not success then

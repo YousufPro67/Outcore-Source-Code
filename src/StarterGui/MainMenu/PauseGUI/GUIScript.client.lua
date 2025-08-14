@@ -1,6 +1,6 @@
 local knit = require(game.ReplicatedStorage.Packages.Knit)
 local input = require(game.ReplicatedStorage.Packages.Input)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local timeeffect = knit.GetController("TimeEffect")
 local plrsetting = knit.GetService("SettingService")
 local plrstate = knit.GetService("PlayerState")
@@ -82,7 +82,7 @@ for i,button in script.Parent.A:GetChildren() do
 end
 
 local playersettings = plrsetting:Get()
-plrsetting.callbackRE:Connect(function(settingn, value)
+plrsetting.OnValueChanged:Connect(function(settingn, value)
 	playersettings[settingn] = value
 end)
 

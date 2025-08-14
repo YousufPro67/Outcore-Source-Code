@@ -1,7 +1,7 @@
 local knit = require(game:GetService('ReplicatedStorage').Packages.Knit)
 Settings = knit.CreateService({
 	Name = "SettingService",
-	Client = {callbackRE = knit.CreateSignal()},
+	Client = {OnValueChanged = knit.CreateSignal()},
 	Players = {
 		OnValueChanged = {},
 		OnDataChanged = {}
@@ -39,7 +39,7 @@ function Settings.Players:Set(player, SettingName, Value)
 	local Setting = tostring(SettingName).upper(SettingName)
 	if Settings.Players[player.UserId] then
 		Settings.Players[player.UserId][Setting] = Value
-		Settings.Client.callbackRE:Fire(player,Setting,Value)
+		Settings.Client.OnValueChanged:Fire(player,Setting,Value)
 		for _, callback in ipairs(Settings.Players[player.UserId].OnValueChanged) do
 			callback(player, Value, Setting)
 		end

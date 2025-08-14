@@ -5,7 +5,7 @@ end)
 while not Loaded do wait() end
 
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local ClientDataManager = knit.GetService("ClientData")
 local PlayerDataManager = knit.GetService("PlayerDataManager")
 local Player:Player = game.Players.LocalPlayer
@@ -382,6 +382,7 @@ Tool.Unequipped:Connect(function()
 end)
 
 local connection = game["Run Service"].PreRender:Connect(function(dt)
+	if not GrappleAim:FindFirstChild("BillboardGui") then return end
 	GrappleAim.BillboardGui.ImageLabel.Rotation = GrappleAim.BillboardGui.ImageLabel.Rotation + (dt * GrappleAimRotSpeed)
 
 	if not IsEquiped then 

@@ -1,6 +1,6 @@
 local UIS = game:GetService("UserInputService")
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local plrdata = knit.GetService("PlayerDataManager")
 local clientdata = knit.GetService("ClientData")
 local Dragging = false
@@ -12,7 +12,18 @@ local decNumber = script.Parent:GetAttribute("DecimalPoints")
 local frame = script.Parent.Frame
 local decimalNumber = 1
 local plrdatatable = plrdata:Get()
+local dataloaded = false
 
+plrdata.OnDataChanged:Connect(function(data)
+	if not dataloaded then 
+		plrdatatable = data
+		dataloaded = true
+	end
+end)
+
+while not dataloaded do
+	wait(0.1)
+end
 
 if decNumber > 0 then
 	for i = 1, decNumber do

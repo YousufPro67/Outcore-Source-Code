@@ -1,5 +1,5 @@
 local knit = require(game.ReplicatedStorage.Packages.Knit)
-knit.Start():await()
+knit.Start({ServicePromises = false}):await()
 local plrsetting = knit.GetService("SettingService")
 
 script.Parent.ChildAdded:Connect(function(child: Instance)

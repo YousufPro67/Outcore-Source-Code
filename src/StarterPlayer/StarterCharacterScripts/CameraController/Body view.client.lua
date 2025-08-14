@@ -17,11 +17,14 @@ Plr.CameraMinZoomDistance = 0.5
 Human.CameraOffset = Vector3.new(0,-0.25,-1.5)
 
 local data = plrData:Get()
+plrData.OnDataChanged:Connect(function(newdata)
+	data = newdata
+end)
 local function Lock (part:BasePart)
 	if not data.SHOW_BODY then return end
 	if part and part:IsA("BasePart") and part.Name ~= "Head" and part.Name ~= "Speed Lines" and part.Name ~= "Torso" and part.Name~="UpperTorso" and part.Name~="LowerTorso" and not part:IsDescendantOf(Char:FindFirstChild("Head")) and not part:IsDescendantOf(Char:FindFirstChild("Torso")) then
 		part.LocalTransparencyModifier = part.Transparency
-		part.Changed:connect(function (property)
+		part.Changed:Connect(function (property)
 			part.LocalTransparencyModifier = part.Transparency
 		end)
 	end
@@ -41,7 +44,7 @@ for i, v in pairs (Char:GetDescendants()) do
 		end
 	end
 end
-Char.ChildAdded:connect(Lock)
+Char.ChildAdded:Connect(Lock)
 Cam.Changed:connect(function (property)
 	if property == "CameraSubject" then
 		if Cam.CameraSubject and Cam.CameraSubject:IsA("VehicleSeat") and Human then
