@@ -16,6 +16,9 @@ local Settings = plrSetting.Players:Get(PLAYER)
 CHARACTER:FindFirstChildOfClass("Humanoid"):UnequipTools()
 BACKPACK:ClearAllChildren()
 
+wait(0.2)
+
+
 local value = Settings.LEVEL_NAME
 
 if workspace.SkyHop:FindFirstChild(value) then
