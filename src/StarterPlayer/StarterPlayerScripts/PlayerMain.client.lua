@@ -85,7 +85,7 @@ plrData.OnValueChanged:Connect(function(settingname,value)
 end)
 
 
-cam.CFrame = plrstates.CAMPART.CFrame or game.Workspace.CameraParts.MainCam.CFrame
+cam.CFrame = plrstates.CAMPART and plrstates.CAMPART.CFrame or game.Workspace.CameraParts.MainCam.CFrame
 cam.CameraSubject = plrstates.CAMPART or game.Workspace.CameraParts.MainCam.CFrame
 hum.Jumping:Connect(function(isJumping)
 	if isJumping then
@@ -95,22 +95,22 @@ hum.Jumping:Connect(function(isJumping)
 end)
 
 runService.PreRender:Connect(function(dt)
-		pcall(function()
+		local s, e = pcall(function()
 			CameraController.ControlCamera(
-						plrstates.FOLLOW,
+						plrstates,
+						plrSettings,
 						cam,
 						player,
-						plrSettings.FOV,
-						plrstates.INGAME,
 						player:GetMouse(),
-						plrstates.CAMPART or game.Workspace.CameraParts.MainCam,
-						cam_speed,
-						plrSettings.CAMERA_SHAKE,
-						nil
+						cam_speed
 					)
 		end)
+		if not s then
+			warn("Error in Camera Control: ", e)
+		end
 		for _,obj:Sound in game.ReplicatedStorage.MUSIC:GetChildren() do
 			if plrSettings.MUSIC then
+				if obj.Name == "OutcoreGame" then continue end
 			obj.Volume = plrSettings.MUSIC / 200
 			end
 		end

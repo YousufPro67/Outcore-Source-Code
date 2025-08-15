@@ -7,7 +7,14 @@ local de = false
 local uis = game:GetService("UserInputService")
 local UGS = UserSettings().GameSettings
 
-function module.ControlCamera(FOLLOW:boolean, CAM:Camera, PLR:Player, FOV:number, IN_GAME:boolean, MOUSE:Mouse, CAM_PART:Part, CAM_SPEED:number, SHAKE:boolean, speedline)
+function module.ControlCamera(PLAYER_SETTINGS, PLAYER_DATA, CAM: Camera, PLR: Player, MOUSE:Mouse, CAM_SPEED:number)
+	local FOLLOW = PLAYER_SETTINGS.FOLLOW
+	local IN_GAME = PLAYER_SETTINGS.INGAME
+	local CAM_PART = PLAYER_SETTINGS.CAMPART or game.Workspace.CameraParts.MainCam
+	local FOV = PLAYER_DATA.FOV
+	local SHAKE = PLAYER_DATA.CAMERA_SHAKE
+	local PLAYER_SPEED = PLAYER_DATA.SPEED
+	
 	local cursorgui = game.Players.LocalPlayer.PlayerGui.Cursor
 	if FOLLOW then
 		de = false
@@ -38,8 +45,8 @@ function module.ControlCamera(FOLLOW:boolean, CAM:Camera, PLR:Player, FOV:number
 			module.tweennew = ts:Create(CAM,TweenInfo.new(1),{CFrame = newcframe})
 			module.tweennew:Play()
 		elseif IN_GAME then
-			local human = PLR.Character:FindFirstChildOfClass("Humanoid")
-			local humanroot:BasePart = PLR.Character:FindFirstChild("HumanoidRootPart")
+			local human = PLR.Character:FindFirstChildOfClass("Humanoid") :: Humanoid
+			local humanroot = PLR.Character:FindFirstChild("HumanoidRootPart") :: BasePart
 			
 			--/Mouse
 			uis.MouseIconEnabled = false
@@ -54,9 +61,14 @@ function module.ControlCamera(FOLLOW:boolean, CAM:Camera, PLR:Player, FOV:number
 			if not s then
 				velocity = Vector3.new(0,0,0)
 			end
-			local Gain = math.clamp(velocity.magnitude, 0, 90)
-			game.ReplicatedStorage.MUSIC.OutcoreGame.EqualizerSoundEffect.MidGain = 90 - Gain
-			game.ReplicatedStorage.MUSIC.OutcoreGame.EqualizerSoundEffect.LowGain = 90 - Gain
+
+			local Vpercent = math.clamp(velocity.Magnitude / PLAYER_SPEED, 0, 1)
+			local Gain = math.clamp(90 * Vpercent, 0, 90)
+			local GameMusic = game.ReplicatedStorage.MUSIC.OutcoreGame
+			GameMusic.EqualizerSoundEffect.MidGain = 90 - Gain
+			GameMusic.EqualizerSoundEffect.LowGain = 90 - Gain
+			GameMusic.Volume = math.clamp((PLAYER_DATA.MUSIC / 200) * Vpercent, (PLAYER_DATA.MUSIC / 200)*0.5, 1)
+			
 			
 			--/CameraSettings
 			CAM.CameraSubject = PLR.Character:FindFirstChildOfClass("Humanoid")
