@@ -86,7 +86,7 @@ end)
 
 
 cam.CFrame = plrstates.CAMPART and plrstates.CAMPART.CFrame or game.Workspace.CameraParts.MainCam.CFrame
-cam.CameraSubject = plrstates.CAMPART or game.Workspace.CameraParts.MainCam.CFrame
+cam.CameraSubject = plrstates.CAMPART or game.Workspace.CameraParts.MainCam
 hum.Jumping:Connect(function(isJumping)
 	if isJumping then
 		local sound = game.ReplicatedStorage.SFX.JumpSFX
