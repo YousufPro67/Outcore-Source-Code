@@ -34,6 +34,8 @@ local sstartime = tick()
 gui.Frame.CanvasGroup.Skip.Activated:Once(function()
 	local uit = TS:Create(gui.Frame, TweenInfo.new(2, Enum.EasingStyle.Sine), {GroupTransparency = 1})
 	uit:Play()
+	game.Players.LocalPlayer.PlayerGui.AlphaNoticeGUI.Enabled = true
+	game.Players.LocalPlayer.PlayerGui.AlphaNoticeGUI.AlphaNoticeLabel.LocalScript.Enabled = true
 	gui.Frame.TextButton:Destroy()
 	task.wait(1)
 	local blurt = TS:Create(blur,TweenInfo.new(2, Enum.EasingStyle.Sine),{Size = 0})
@@ -92,6 +94,8 @@ end
 wait(1)
 local uit = TS:Create(gui.Frame, TweenInfo.new(2, Enum.EasingStyle.Sine), {GroupTransparency = 1})
 uit:Play()
+game.Players.LocalPlayer.PlayerGui.AlphaNoticeGUI.Enabled = true
+game.Players.LocalPlayer.PlayerGui.AlphaNoticeGUI.AlphaNoticeLabel.LocalScript.Enabled = true
 wait(1)
 local blurt = TS:Create(blur,TweenInfo.new(2, Enum.EasingStyle.Sine),{Size = 0})
 blurt:Play()
