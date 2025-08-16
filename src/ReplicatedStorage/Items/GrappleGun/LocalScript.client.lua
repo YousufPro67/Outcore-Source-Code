@@ -269,13 +269,13 @@ local function HandleMouseButton(IsMouse1)
 					HookInitialAnimation:Play(HookAnimationSpeed)
 					TargetPart.CanCollide = false
 					HumanoidRootPart.Anchored = true
+					print("HRP Anchored for hook")
 					local TargetHumanoid = TargetPart.Parent:FindFirstChildOfClass("Humanoid")
 					if TargetHumanoid and TargetPart:HasTag("Enemy") then
 						if TargetHumanoid.Health > 1 then
 							HitEnemy(TargetPart)
 						else
-							HookInitialAnimation:Stop()
-							HookMainAnimation:Stop(0.5)
+							NormalHook(TargetPart)
 						end
 					else
 						NormalHook(TargetPart)
@@ -344,8 +344,6 @@ local function HandleMouseButton(IsMouse1)
 					HookMainAnimation:Stop(0.5)
 				end
 				NewPart:Destroy()
-			else
-				
 			end
 		end
 		Debounce = false
@@ -373,6 +371,11 @@ UserInputService.InputEnded:Connect(function(input)
 	end
 end)
 
+HumanoidRootPart:GetPropertyChangedSignal("Anchored"):Connect(function()
+	if HumanoidRootPart.Anchored then
+		print("HumanoidRootPart is anchored")
+	end
+end)
 
 Tool.Equipped:Connect(function()
 	IsEquiped = true
