@@ -12,6 +12,7 @@ local BULLET_SPEED = 100
 local DELAY = 2
 local DAMAGE = 100
 local BULLET_COLOR = Color3.fromRGB(0, 170, 255)
+local TRAIL_COLOR = Color3.fromRGB(0, 85, 255)
 local MAX_DIST = 300
 local COLLIDER_RADIUS = 2
 
@@ -28,6 +29,10 @@ end)
 
 wait(3)
 RUN_SERVICE.PreRender:Connect(function()
+	print(PLAYER_SETTINGS.FOLLOW)
+	print(PLAYER_SETTINGS.INGAME)
+	if not PLAYER_SETTINGS.FOLLOW then return end
+	if not PLAYER_SETTINGS.INGAME then return end
 	if not workspace:FindFirstChild("OutcoreStorage") then return end
 	for _, ENEMY: Model in workspace:FindFirstChild("OutcoreStorage").Enemies:GetChildren() do
 		if ENEMY:IsA("Model") then
@@ -108,6 +113,18 @@ RUN_SERVICE.PreRender:Connect(function()
 				Bullet.Size = Vector3.new(0.2, 0.2, 0.7)
 				Bullet.CFrame = CFrame.new(Head.Position, Head.Position + -dir)
 				
+				local Trail = Instance.new("Trail") :: Trail
+				Trail.Parent = Bullet
+				Trail.Lifetime = 2
+				Trail.Attachment0 = Instance.new("Attachment", Bullet)
+				Trail.Attachment1 = Instance.new("Attachment", Bullet)
+				Trail.Brightness = 10
+				Trail.Color = ColorSequence.new(TRAIL_COLOR)
+				Trail.Enabled = true
+				Trail.LightEmission = 1
+				Trail.WidthScale = NumberSequence.new(0.5)
+				Trail.Transparency = NumberSequence.new(0, 1)
+
 				local Collider = Instance.new("Part")
 				Collider.Parent = Bullet
 				Collider.Name = "Collider"
